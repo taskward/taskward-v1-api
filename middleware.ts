@@ -2,19 +2,16 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  request.headers.append("Access-Control-Allow-Origin", "*");
-  request.headers.append(
+  const response = NextResponse.next();
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set(
     "Access-Control-Allow-Headers",
     "X-Requested-With,Authorization"
   );
-  request.headers.append(
+  response.headers.set(
     "Access-Control-Allow-Methods",
     "PUT,POST,GET,DELETE,OPTIONS,HEAD"
   );
-  request.headers.append("X-Powered-By", " 3.2.1");
-  return NextResponse.next();
+  response.headers.set("X-Powered-By", " 3.2.1");
+  return response;
 }
-
-export const config = {
-  matcher: "*",
-};
