@@ -20,7 +20,8 @@
       "@constants": ["constants"],
       "@components": ["components"],
       "@hooks": ["hooks"],
-      "@interfaces": ["interfaces"]
+      "@interfaces": ["interfaces"],
+      "@database": ["database"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/middleware.ts"],
