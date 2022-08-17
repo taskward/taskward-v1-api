@@ -31,8 +31,14 @@ model Task {
   url          String?
   description  String?
   creationTime DateTime @default(now()) @map("creation_time") @db.Timestamp(6)
-  complete     Boolean?
+  complete     Boolean
   priority     Int?     @default(0)
-  top          Boolean?
+  top          Boolean
   index        Int?     @default(0)
+  archieve     Boolean  
+}
+
+model Tag {
+  id Int @id  @default(autoincrement())
+
 }
