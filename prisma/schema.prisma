@@ -15,6 +15,7 @@ model User {
   biography  String?
   email      String?
   location   String?
+  is_active  Boolean @default(true)
   OAuth      OAuth[]
 }
 
@@ -35,10 +36,11 @@ model Task {
   priority     Int?     @default(0)
   top          Boolean
   index        Int?     @default(0)
-  archieve     Boolean  
+  archieve     Boolean
+  deleted      Boolean  @default(false)
 }
 
 model Tag {
-  id Int @id  @default(autoincrement())
-
+  id      Int     @id @default(autoincrement())
+  deleted Boolean @default(false)
 }
