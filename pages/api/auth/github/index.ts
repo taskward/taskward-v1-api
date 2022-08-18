@@ -24,14 +24,8 @@ const loginWithGitHub = async (
       response.status(405).json(ERROR_405_MESSAGE);
       return;
     }
+
     const requestToken = request.query.code;
-
-    console.log(request);
-    const users = await prisma.user.findMany();
-    console.log(users.length);
-
-    response.json(users);
-    return;
 
     if (!requestToken) {
       response.status(401).json(ERROR_401_MESSAGE_NO_TOKEN);

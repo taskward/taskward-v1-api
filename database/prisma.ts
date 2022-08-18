@@ -18,15 +18,15 @@ prisma.$use(async (params: any, next: any) => {
   const before = Date.now();
   const result = await next(params);
   const after = Date.now();
-  console.log(
-    `Query ${params.model}.${params.action} took ${after - before}ms`
-  );
+  // console.log(
+  //   `Query ${params.model}.${params.action} took ${after - before}ms`
+  // );
   return result;
 });
 
 // Soft delete middleware
+// Effect: findUnique findFirst findMany
 prisma.$use(async (params: any, next: any) => {
-  console.log(params);
   if (params.action === "findUnique" || params.action === "findFirst") {
     // Change to findFirst - you cannot filter by anything except ID / unique with findUnique
     params.action = "findFirst";
@@ -36,7 +36,9 @@ prisma.$use(async (params: any, next: any) => {
   }
   if (params.action === "findMany") {
     // Find many queries
-    if (params.args.where) {
+    if (!params.args) {
+      params.args = { where: { deletedAt: null } };
+    } else if (params.args.where) {
       if (params.args.where.deletedAt == undefined) {
         // Exclude deleted records if they have not been explicitly requested
         params.args.where["deletedAt"] = null;
@@ -48,6 +50,7 @@ prisma.$use(async (params: any, next: any) => {
   return next(params);
 });
 
+// Effect: update updateMany
 prisma.$use(async (params: any, next: any) => {
   if (params.action == "update") {
     // Change to updateMany - you cannot filter by anything except ID / unique with findUnique
@@ -65,6 +68,8 @@ prisma.$use(async (params: any, next: any) => {
   return next(params);
 });
 
+// Effect: delete => update
+//         deleteMany => updateMany
 prisma.$use(async (params: any, next: any) => {
   // Check incoming query type
   if (params.action == "delete") {
