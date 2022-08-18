@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("BRUCE_WORLD_DATABASE_URL")
-  shadowDatabaseUrl  = env("BRUCE_WORLD_SHADOW_DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("BRUCE_WORLD_DATABASE_URL")
+  shadowDatabaseUrl = env("BRUCE_WORLD_SHADOW_DATABASE_URL")
 }
 
 model User {
@@ -20,7 +20,7 @@ model User {
   biography String?   @db.VarChar(50)
   location  String?   @db.VarChar(25)
   role      Role      @default(USER)
-  oauths    OAuth[]
+  auths     Auth[]
   notes     Note[]
   tags      Tag[]
   themes    Theme[]
@@ -37,7 +37,7 @@ enum Role {
   @@map("role")
 }
 
-model OAuth {
+model Auth {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
@@ -46,7 +46,7 @@ model OAuth {
   userId    Int       @map("user_id")
   User      User      @relation(fields: [userId], references: [id])
 
-  @@map("oauth")
+  @@map("auth")
 }
 
 enum AuthType {
