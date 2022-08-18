@@ -11,7 +11,7 @@ datasource db {
 model User {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updateAt  DateTime? @map("update_at") @db.Timestamp(3)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   deleteAt  DateTime? @map("delete_at") @db.Timestamp(3)
   username  String    @unique @db.VarChar(25)
   email     String    @unique @db.VarChar(25)
@@ -40,6 +40,7 @@ enum Role {
 model Auth {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   authType  AuthType  @default(USERNAME) @map("auth_type")
   openId    Int       @unique @map("open_id")
@@ -59,7 +60,7 @@ enum AuthType {
 model Note {
   id          Int       @id @default(autoincrement())
   createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt   DateTime? @map("updated_at") @db.Timestamp(3)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   finishedAt  DateTime? @map("finished_at") @db.Timestamp(3)
   deletedAt   DateTime? @map("deleted_at") @db.Timestamp(3)
   name        String    @db.VarChar(50)
@@ -80,7 +81,7 @@ model Note {
 model Task {
   id         Int       @id @default(autoincrement())
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt  DateTime? @map("updated_at") @db.Timestamp(3)
+  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   finishedAt DateTime? @map("finished_at") @db.Timestamp(3)
   deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
   finished   Boolean   @default(false)
@@ -96,6 +97,7 @@ model Task {
 model Tag {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   index     Int       @default(0)
   userId    Int       @map("user_id")
@@ -109,6 +111,7 @@ model Tag {
 model Theme {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   index     Int       @default(0)
   userId    Int       @map("user_id")
