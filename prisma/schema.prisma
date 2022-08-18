@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id         Int       @id @default(autoincrement())
-  createAt   DateTime  @default(now()) @map("createAt") @db.Timestamp(3)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updateAt   DateTime? @map("update_at") @db.Timestamp(3)
   delete_at  DateTime? @map("deleteAt") @db.Timestamp(3)
   username   String    @unique @db.VarChar(25)
@@ -38,12 +38,12 @@ enum Role {
 
 model OAuth {
   id        Int       @id @default(autoincrement())
-  createAt  DateTime  @default(now()) @map("createAt") @db.Timestamp(3)
-  delete_at DateTime? @map("deleteAt") @db.Timestamp(3)
-  auth_type AuthType  @default(USERNAME) @map("authType")
-  open_id   Int       @unique @map("openId")
-  user_id   Int       @map("userId")
-  User      User      @relation(fields: [user_id], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  deleteAt  DateTime? @map("deleted_at") @db.Timestamp(3)
+  authType  AuthType  @default(USERNAME) @map("auth_type")
+  openId    Int       @unique @map("open_id")
+  userId    Int       @map("user_id")
+  User      User      @relation(fields: [userId], references: [id])
 
   @@map("oauth")
 }
