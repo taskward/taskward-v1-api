@@ -12,7 +12,7 @@ model User {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
-  deleteAt  DateTime? @map("delete_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   username  String    @unique @db.VarChar(25)
   email     String    @unique @db.VarChar(25)
   name      String?   @db.VarChar(25)
@@ -53,6 +53,7 @@ model Auth {
 enum AuthType {
   USERNAME @map("username")
   GITHUB   @map("github")
+  GOOGLE   @map("google")
 
   @@map("auth_type")
 }

@@ -1,9 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import { errorHandler } from "@utils";
-import { POST_GITHUB_TOKEN_URL } from "./_constants";
+import {
+  POST_GITHUB_TOKEN_URL,
+  ERROR_401_MESSAGE_NO_TOKEN,
+} from "./_constants";
 import { getUserInfoByToken } from "./_services";
 import { User } from "@interfaces";
+import { prisma } from "@database";
+import { ERROR_405_MESSAGE } from "@constants";
 
 type loginResult = {
   token: string;
@@ -15,11 +20,24 @@ const loginWithGitHub = async (
   response: NextApiResponse<loginResult | string>
 ) => {
   try {
-    const requestToken = request.query.code;
-    if (!requestToken) {
-      response.status(401).json("Authenticate failed: No code.");
+    if (request.method !== "POST") {
+      response.status(405).json(ERROR_405_MESSAGE);
       return;
     }
+    const requestToken = request.query.code;
+
+    console.log(request);
+    const users = await prisma.user.findMany();
+    console.log(users.length);
+
+    response.json(users);
+    return;
+
+    if (!requestToken) {
+      response.status(401).json(ERROR_401_MESSAGE_NO_TOKEN);
+      return;
+    }
+
     const tokenResponse = await axios({
       method: "POST",
       url:
@@ -31,8 +49,9 @@ const loginWithGitHub = async (
         accept: "application/json;charset=utf-8",
       },
     });
+
     if (!tokenResponse.data.access_token) {
-      response.status(401).json("Authenticate failed: Do not Have a token.");
+      response.status(401).json(ERROR_401_MESSAGE_NO_TOKEN);
       return;
     }
 
