@@ -5,24 +5,25 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("BRUCE_WORLD_DATABASE_URL")
+  shadowDatabaseUrl  = env("BRUCE_WORLD_SHADOW_DATABASE_URL")
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updateAt   DateTime? @map("update_at") @db.Timestamp(3)
-  delete_at  DateTime? @map("deleteAt") @db.Timestamp(3)
-  username   String    @unique @db.VarChar(25)
-  email      String    @unique @db.VarChar(25)
-  name       String?   @db.VarChar(25)
-  avatar_url String?   @map("avatarUrl")
-  biography  String?   @db.VarChar(50)
-  location   String?   @db.VarChar(25)
-  role       Role      @default(USER)
-  oauths     OAuth[]
-  notes      Note[]
-  tags       Tag[]
-  themes     Theme[]
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updateAt  DateTime? @map("update_at") @db.Timestamp(3)
+  deleteAt  DateTime? @map("delete_at") @db.Timestamp(3)
+  username  String    @unique @db.VarChar(25)
+  email     String    @unique @db.VarChar(25)
+  name      String?   @db.VarChar(25)
+  avatarUrl String?   @map("avatar_url")
+  biography String?   @db.VarChar(50)
+  location  String?   @db.VarChar(25)
+  role      Role      @default(USER)
+  oauths    OAuth[]
+  notes     Note[]
+  tags      Tag[]
+  themes    Theme[]
 
   @@map("user")
 }
@@ -39,7 +40,7 @@ enum Role {
 model OAuth {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  deleteAt  DateTime? @map("deleted_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   authType  AuthType  @default(USERNAME) @map("auth_type")
   openId    Int       @unique @map("open_id")
   userId    Int       @map("user_id")
@@ -57,32 +58,32 @@ enum AuthType {
 
 model Note {
   id          Int       @id @default(autoincrement())
-  createAt    DateTime  @default(now()) @map("createAt") @db.Timestamp(3)
-  updateAt    DateTime? @map("update_at") @db.Timestamp(3)
-  complete_at DateTime? @map("completeAt") @db.Timestamp(3)
-  delete_at   DateTime? @map("deleteAt") @db.Timestamp(3)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt   DateTime? @map("updated_at") @db.Timestamp(3)
+  finishedAt  DateTime? @map("finished_at") @db.Timestamp(3)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamp(3)
   name        String    @db.VarChar(50)
   description String?   @db.VarChar(255)
   priority    Int?      @default(0)
   index       Int       @default(0)
-  top         Boolean   @default(false)
-  archieve    Boolean   @default(false)
+  toped       Boolean   @default(false)
+  archieved   Boolean   @default(false)
   tasks       Task[]
   tags        Tag[]
   themes      Theme[]
-  user_id     Int       @map("userId")
-  User        User      @relation(fields: [user_id], references: [id])
+  userId      Int       @map("user_id")
+  User        User      @relation(fields: [userId], references: [id])
 
   @@map("note")
 }
 
 model Task {
   id         Int       @id @default(autoincrement())
-  createAt   DateTime  @default(now()) @map("create_at") @db.Timestamp(3)
-  updateAt   DateTime? @map("update_at") @db.Timestamp(3)
-  completeAT DateTime? @map("complete_at") @db.Timestamp(3)
-  deleteAT   DateTime? @map("delete_at") @db.Timestamp(3)
-  completed  Boolean   @default(false)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt  DateTime? @map("updated_at") @db.Timestamp(3)
+  finishedAt DateTime? @map("finished_at") @db.Timestamp(3)
+  deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
+  finished   Boolean   @default(false)
   content    String?   @db.VarChar(255)
   linkUrl    String?   @map("link_url")
   index      Int       @default(0)
@@ -93,27 +94,27 @@ model Task {
 }
 
 model Tag {
-  id       Int       @id @default(autoincrement())
-  createAt DateTime  @default(now()) @map("create_at") @db.Timestamp(3)
-  deleteAt DateTime? @map("delete_at") @db.Timestamp(3)
-  index    Int       @default(0)
-  userId   Int       @map("user_id")
-  User     User      @relation(fields: [userId], references: [id])
-  noteId   Int       @map("note_id")
-  Note     Note      @relation(fields: [noteId], references: [id])
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
+  index     Int       @default(0)
+  userId    Int       @map("user_id")
+  User      User      @relation(fields: [userId], references: [id])
+  noteId    Int       @map("note_id")
+  Note      Note      @relation(fields: [noteId], references: [id])
 
   @@map("tag")
 }
 
 model Theme {
-  id       Int       @id @default(autoincrement())
-  createAt DateTime  @default(now()) @map("create_at") @db.Timestamp(3)
-  deleteAt DateTime? @map("delete_at") @db.Timestamp(3)
-  index    Int       @default(0)
-  userId   Int       @map("user_id")
-  User     User      @relation(fields: [userId], references: [id])
-  noteId   Int       @map("note_id")
-  Note     Note      @relation(fields: [noteId], references: [id])
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
+  index     Int       @default(0)
+  userId    Int       @map("user_id")
+  User      User      @relation(fields: [userId], references: [id])
+  noteId    Int       @map("note_id")
+  Note      Note      @relation(fields: [noteId], references: [id])
 
   @@map("theme")
 }
