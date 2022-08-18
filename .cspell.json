@@ -1,6 +1,14 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["uuidv4", "taskward", "vercel", "pnpm", "tsbuildinfo"],
+  "words": [
+    "uuidv4",
+    "taskward",
+    "vercel",
+    "pnpm",
+    "tsbuildinfo",
+    "axios",
+    "nodemailer"
+  ],
   "flagWords": []
 }
