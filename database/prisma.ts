@@ -28,19 +28,13 @@ prisma.$use(async (params: any, next: any) => {
 // Effect: findUnique findFirst findMany
 prisma.$use(async (params: any, next: any) => {
   if (params.action === "findUnique" || params.action === "findFirst") {
-    // Change to findFirst - you cannot filter by anything except ID / unique with findUnique
     params.action = "findFirst";
-    // Add 'deletedAt' filter
-    // ID filter maintained
-    params.args.where["deletedAt"] = null;
   }
-  if (params.action === "findMany") {
-    // Find many queries
+  if (params.action === "findMany" || params.action === "findFirst") {
     if (!params.args) {
       params.args = { where: { deletedAt: null } };
     } else if (params.args.where) {
       if (params.args.where.deletedAt == undefined) {
-        // Exclude deleted records if they have not been explicitly requested
         params.args.where["deletedAt"] = null;
       }
     } else {
