@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@next-auth/prisma-adapter': ^1.0.4
   '@prisma/client': ^4.2.1
   '@types/node': 18.7.3
   '@types/nodemailer': ^6.4.5
@@ -19,6 +20,7 @@ specifiers:
   typescript: 4.7.4
 
 dependencies:
+  '@next-auth/prisma-adapter': 1.0.4_swgebyl5dvpyn7as73hupjfpya
   '@prisma/client': 4.2.1_prisma@4.2.1
   axios: 0.27.2
   next: 12.2.5_biqbaboplfbrettd7655fr4n2y
@@ -341,6 +343,16 @@ packages:
   /@humanwhocodes/object-schema/1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
+
+  /@next-auth/prisma-adapter/1.0.4_swgebyl5dvpyn7as73hupjfpya:
+    resolution: {integrity: sha512-jIOM6CzCbl2/Mzbx9kb2IjtHoJOeRN9wtQgLk4EUm5bhneSVGv1rtz5TDskvp2UfCa+EK9nDmug+lje41z80Gg==}
+    peerDependencies:
+      '@prisma/client': '>=2.26.0 || >=3'
+      next-auth: ^4
+    dependencies:
+      '@prisma/client': 4.2.1_prisma@4.2.1
+      next-auth: 4.10.3_br325yun545l5vwdnneu6tztxq
+    dev: false
 
   /@next/env/12.2.5:
     resolution: {integrity: sha512-vLPLV3cpPGjUPT3PjgRj7e3nio9t6USkuew3JE/jMeon/9Mvp1WyR18v3iwnCuX7eUAm1HmAbJHHLAbcu/EJcw==}
