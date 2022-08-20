@@ -7,7 +7,6 @@ import {
 } from "./_constants";
 import { getUserInfoByToken } from "./_services";
 import { User } from "@interfaces";
-import { prisma } from "@database";
 import { ERROR_405_MESSAGE } from "@constants";
 
 type loginResult = {
