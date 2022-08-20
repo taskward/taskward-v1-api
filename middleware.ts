@@ -3,15 +3,15 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
-  response.headers.set("Access-Control-Allow-Origin", "*");
-  response.headers.set(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,Authorization"
-  );
+  response.headers.set("Access-Control-Allow-Credentials", "true");
+  response.headers.set("Access-Control-Allow-Origin", "http://localhost:5173");
   response.headers.set(
     "Access-Control-Allow-Methods",
-    "PUT,POST,GET,DELETE,OPTIONS,HEAD"
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
   );
-  response.headers.set("X-Powered-By", " 3.2.1");
+  response.headers.set(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
   return response;
 }
