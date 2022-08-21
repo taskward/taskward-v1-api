@@ -17,7 +17,7 @@ import {
 
 interface LoginResult {
   accessToken: string;
-  user: User;
+  user: Partial<User>;
 }
 
 const loginWithGitHub = async (
@@ -87,10 +87,20 @@ const loginWithGitHub = async (
         }));
 
       const generatedToken: string = createToken(auth.User);
+      const userResult: Partial<User> = {
+        id: auth.userId,
+        username: auth.User.username,
+        email: auth.User.email,
+        name: auth.User.name,
+        avatarUrl: auth.User.avatarUrl,
+        biography: auth.User.biography,
+        location: auth.User.location,
+        role: auth.User.role,
+      };
 
       response.status(200).json({
         accessToken: generatedToken,
-        user: auth.User,
+        user: userResult,
       });
     } else {
       // Insert a user and auth
@@ -113,10 +123,20 @@ const loginWithGitHub = async (
       });
 
       const generatedToken: string = createToken(user);
+      const userResult: Partial<User> = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        name: user.name,
+        avatarUrl: user.avatarUrl,
+        biography: user.biography,
+        location: user.location,
+        role: user.role,
+      };
 
       response.status(200).json({
         accessToken: generatedToken,
-        user: user,
+        user: userResult,
       });
     }
   } catch (error) {
