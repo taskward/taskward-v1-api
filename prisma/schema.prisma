@@ -39,23 +39,22 @@ enum Role {
 }
 
 model Auth {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
-  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
-  authType  AuthType  @default(USERNAME) @map("auth_type")
-  openId    Int       @unique @map("open_id")
-  userId    Int       @map("user_id")
-  User      User      @relation(fields: [userId], references: [id])
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamp(3)
+  authType    AuthType  @map("auth_type")
+  accessToken String    @map("access_token") @db.VarChar(128)
+  openId      Int       @unique @map("open_id")
+  userId      Int       @map("user_id")
+  User        User      @relation(fields: [userId], references: [id])
 
   @@map("auth")
 }
 
 enum AuthType {
-  USERNAME @map("username")
-  EMAIL    @map("email")
-  GITHUB   @map("github")
-  GOOGLE   @map("google")
+  GITHUB @map("github")
+  GOOGLE @map("google")
 
   @@map("auth_type")
 }
