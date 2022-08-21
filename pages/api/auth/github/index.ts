@@ -1,13 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
+
 import { errorHandler } from "@utils";
+import { User } from "@interfaces";
+import { ERROR_405_MESSAGE } from "@constants";
+
+import { getUserInfoByToken } from "./_services";
 import {
   POST_GITHUB_TOKEN_URL,
   ERROR_401_MESSAGE_NO_TOKEN,
 } from "./_constants";
-import { getUserInfoByToken } from "./_services";
-import { User } from "@interfaces";
-import { ERROR_405_MESSAGE } from "@constants";
 
 type loginResult = {
   token: string;
