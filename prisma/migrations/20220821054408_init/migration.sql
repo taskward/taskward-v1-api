@@ -2,16 +2,17 @@
 CREATE TYPE "role" AS ENUM ('admin', 'user', 'membership', 'beta');
 
 -- CreateEnum
-CREATE TYPE "auth_type" AS ENUM ('username', 'github');
+CREATE TYPE "auth_type" AS ENUM ('github', 'google');
 
 -- CreateTable
 CREATE TABLE "user" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "update_at" TIMESTAMP(3),
-    "delete_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3),
+    "deleted_at" TIMESTAMP(3),
     "username" VARCHAR(25) NOT NULL,
-    "email" VARCHAR(25) NOT NULL,
+    "password" VARCHAR(50),
+    "email" VARCHAR(50),
     "name" VARCHAR(25),
     "avatar_url" TEXT,
     "biography" VARCHAR(50),
@@ -22,15 +23,17 @@ CREATE TABLE "user" (
 );
 
 -- CreateTable
-CREATE TABLE "oauth" (
+CREATE TABLE "auth" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
     "deleted_at" TIMESTAMP(3),
-    "auth_type" "auth_type" NOT NULL DEFAULT 'username',
+    "auth_type" "auth_type" NOT NULL,
+    "access_token" VARCHAR(128) NOT NULL,
     "open_id" INTEGER NOT NULL,
     "user_id" INTEGER NOT NULL,
 
-    CONSTRAINT "oauth_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "auth_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -71,6 +74,7 @@ CREATE TABLE "task" (
 CREATE TABLE "tag" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
     "deleted_at" TIMESTAMP(3),
     "index" INTEGER NOT NULL DEFAULT 0,
     "user_id" INTEGER NOT NULL,
@@ -83,6 +87,7 @@ CREATE TABLE "tag" (
 CREATE TABLE "theme" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
     "deleted_at" TIMESTAMP(3),
     "index" INTEGER NOT NULL DEFAULT 0,
     "user_id" INTEGER NOT NULL,
@@ -98,10 +103,10 @@ CREATE UNIQUE INDEX "user_username_key" ON "user"("username");
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "oauth_open_id_key" ON "oauth"("open_id");
+CREATE UNIQUE INDEX "auth_open_id_key" ON "auth"("open_id");
 
 -- AddForeignKey
-ALTER TABLE "oauth" ADD CONSTRAINT "oauth_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "auth" ADD CONSTRAINT "auth_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "note" ADD CONSTRAINT "note_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
