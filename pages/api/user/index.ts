@@ -11,10 +11,10 @@ const getUserInfo = async (
   response: NextApiResponse<Partial<User> | string>
 ) => {
   try {
-    // if (request.method !== "GET") {
-    //   response.status(405).json(ERROR_405_MESSAGE);
-    //   return;
-    // }
+    if (request.method !== "GET") {
+      response.status(405).json(ERROR_405_MESSAGE);
+      return;
+    }
 
     const authResult = validateToken(request);
     if (!authResult) {
