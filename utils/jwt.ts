@@ -5,8 +5,9 @@ import { User } from "@prisma/client";
 
 function createToken(user: User): string {
   const accessToken = sign(
-    { username: user.username, id: user.id },
-    process.env.JWT_KEY
+    { username: user.username, id: user.id, role: user.role },
+    process.env.JWT_KEY,
+    { expiresIn: "1d" }
   );
   return accessToken;
 }
