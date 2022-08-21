@@ -34,6 +34,7 @@ const signupByUsername = async (
     }
 
     const hashPassword: string = await bcrypt.hash(password, 10);
+
     const user: User = await prisma.user.create({
       data: { username: username, password: hashPassword },
     });
