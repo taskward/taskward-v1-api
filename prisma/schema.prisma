@@ -14,7 +14,8 @@ model User {
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   username  String    @unique @db.VarChar(25)
-  email     String    @unique @db.VarChar(25)
+  password  String?   @db.VarChar(16)
+  email     String?   @unique @db.VarChar(50)
   name      String?   @db.VarChar(25)
   avatarUrl String?   @map("avatar_url")
   biography String?   @db.VarChar(50)
@@ -52,6 +53,7 @@ model Auth {
 
 enum AuthType {
   USERNAME @map("username")
+  EMAIL    @map("email")
   GITHUB   @map("github")
   GOOGLE   @map("google")
 
