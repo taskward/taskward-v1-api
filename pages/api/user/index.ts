@@ -11,6 +11,10 @@ const getUserInfo = async (
   response: NextApiResponse<Partial<User> | string>
 ) => {
   try {
+    if (request.method === "OPTIONS") {
+      response.status(200).end();
+      return;
+    }
     if (request.method !== "GET") {
       response.status(405).json(ERROR_405_MESSAGE);
       return;
@@ -18,7 +22,7 @@ const getUserInfo = async (
 
     const authResult = validateToken(request);
     if (!authResult) {
-      response.status(401).json("");
+      response.status(401).end();
       return;
     }
 
@@ -37,7 +41,7 @@ const getUserInfo = async (
     });
 
     if (!user) {
-      response.status(404).json("");
+      response.status(404).end();
       return;
     }
 

@@ -25,6 +25,10 @@ const loginWithGitHub = async (
   response: NextApiResponse<LoginResult | ErrorModel>
 ) => {
   try {
+    if (request.method === "OPTIONS") {
+      response.status(200).end();
+      return;
+    }
     if (request.method !== "POST") {
       response.status(405).json({ errorKey: ERROR_405_MESSAGE });
       return;
