@@ -1,3 +1,3 @@
 export { errorHandler } from "./api";
 
-export { createToken } from "./jwt";
+export { createToken, validateToken } from "./jwt";
