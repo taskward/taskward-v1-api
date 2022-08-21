@@ -8,7 +8,8 @@
     "pnpm",
     "tsbuildinfo",
     "axios",
-    "nodemailer"
+    "nodemailer",
+    "auths"
   ],
   "flagWords": []
 }
