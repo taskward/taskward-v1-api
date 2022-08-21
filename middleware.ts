@@ -3,6 +3,9 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
+  if (request.method === "OPTIONS") {
+    return new Response();
+  }
   response.headers.set("Access-Control-Allow-Credentials", "true");
   response.headers.set("Access-Control-Allow-Origin", "*");
   response.headers.set(
