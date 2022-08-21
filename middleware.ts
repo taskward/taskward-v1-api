@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { validateToken } from "@utils";
-import type { NextResponseWithAuth } from "@interfaces";
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
