@@ -63,7 +63,7 @@ prisma.$use(async (params: any, next: any) => {
 });
 
 // Effect: delete => update
-//         deleteMany => updateMany
+// deleteMany => updateMany
 prisma.$use(async (params: any, next: any) => {
   // Check incoming query type
   if (params.action == "delete") {

@@ -1,9 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+
+import { User } from "@prisma/client";
+
 import { errorHandler } from "@utils";
-import { getUserInfoByToken } from "./_services";
-import { User } from "@interfaces";
-import { ERROR_401_MESSAGE_NO_TOKEN } from "./_constants";
 import { ERROR_405_MESSAGE } from "@constants";
+
+import { getGitHubUserInfoByAccessToken } from "./_services";
+import { ERROR_401_MESSAGE_NO_TOKEN } from "./_constants";
 
 const getUserByToken = async (
   request: NextApiRequest,
@@ -28,10 +31,10 @@ const getUserByToken = async (
       return;
     }
 
-    const userInfo = await getUserInfoByToken(githubToken);
+    const userInfo = await getGitHubUserInfoByAccessToken(githubToken);
 
     response.status(200).json({
-      userInfo,
+      userInfo: null,
     });
   } catch (error) {
     response.status(500).end(errorHandler(error));
