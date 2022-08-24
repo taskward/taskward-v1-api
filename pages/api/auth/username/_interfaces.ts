@@ -2,7 +2,12 @@ import { UserInfoModel } from "@interfaces";
 
 interface LoginResult {
   accessToken: string;
-  user: Partial<UserInfoModel>;
+  user: UserInfoModel;
 }
 
-export type { LoginResult };
+interface SignupResult {
+  accessToken: string;
+  user: UserInfoModel;
+}
+
+export type { LoginResult, SignupResult };

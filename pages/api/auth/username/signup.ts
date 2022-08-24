@@ -4,17 +4,22 @@ import bcrypt from "bcrypt";
 import { prisma } from "@database";
 import { User } from "@prisma/client";
 
-import { errorHandler } from "@utils";
-import { ErrorModel, ValidationModel } from "@interfaces";
+import { errorHandler, createToken } from "@utils";
+import {
+  ErrorModel,
+  SuccessModel,
+  ValidationModel,
+  UserInfoModel,
+} from "@interfaces";
 import { ERROR_405_MESSAGE } from "@constants";
 
 import { signInValidation } from "./_services";
-import { SuccessModel } from "@interfaces";
 import { SIGN_UP_SUCCESS } from "./_constants";
+import { SignupResult } from "./_interfaces";
 
 const signupByUsername = async (
   request: NextApiRequest,
-  response: NextApiResponse<SuccessModel | ErrorModel>
+  response: NextApiResponse<(SignupResult & SuccessModel) | ErrorModel>
 ) => {
   try {
     if (request.method === "OPTIONS") {
@@ -48,7 +53,26 @@ const signupByUsername = async (
       response.status(404).json({ errorKey: "Sign up failed" });
     }
 
-    response.status(200).json({ successKey: SIGN_UP_SUCCESS });
+    const generatedToken = createToken(user);
+
+    const userInfo: UserInfoModel = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+      avatarUrl: user.avatarUrl,
+      biography: user.biography,
+      location: user.location,
+      role: user.role,
+    };
+
+    response
+      .status(200)
+      .json({
+        successKey: SIGN_UP_SUCCESS,
+        accessToken: generatedToken,
+        user: userInfo,
+      });
   } catch (error) {
     response.status(500).end(errorHandler(error));
   }
