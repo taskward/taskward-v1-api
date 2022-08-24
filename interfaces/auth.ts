@@ -1,4 +1,4 @@
-import type { Role } from "@prisma/client";
+import type { User, Role } from "@prisma/client";
 
 interface AuthModel {
   username: string;
@@ -6,4 +6,16 @@ interface AuthModel {
   role: Role;
 }
 
-export type { AuthModel };
+type PickedUserInfo =
+  | "id"
+  | "username"
+  | "email"
+  | "name"
+  | "avatarUrl"
+  | "biography"
+  | "location"
+  | "role";
+
+type UserInfoModel = Pick<User, PickedUserInfo>;
+
+export type { AuthModel, UserInfoModel };

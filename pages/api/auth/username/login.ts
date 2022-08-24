@@ -2,10 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 
 import { prisma } from "@database";
-import { User } from "@prisma/client";
 
 import { createToken, errorHandler } from "@utils";
-import { ErrorModel, SuccessModel } from "@interfaces";
+import { ErrorModel, SuccessModel, UserInfoModel } from "@interfaces";
 import { ERROR_405_MESSAGE } from "@constants";
 
 import { LoginResult } from "./_interfaces";
@@ -49,16 +48,21 @@ const loginByUsername = async (
 
     const generatedToken = createToken(user);
 
-    type whatIPick = {
-      password: string;
+    const userInfo: UserInfoModel = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+      avatarUrl: user.avatarUrl,
+      biography: user.biography,
+      location: user.location,
+      role: user.role,
     };
-
-    const userResult: Pick<User, keyof whatIPick> = user;
 
     response.status(200).json({
       successKey: LOGIN_SUCCESS,
       accessToken: generatedToken,
-      user: userResult,
+      user: userInfo,
     });
   } catch (error) {
     response.status(500).end(errorHandler(error));

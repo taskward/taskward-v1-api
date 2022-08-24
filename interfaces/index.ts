@@ -1,4 +1,4 @@
-export type { AuthModel } from "./auth";
+export type { AuthModel, UserInfoModel } from "./auth";
 
 export type { ErrorModel, SuccessModel } from "./response";
 

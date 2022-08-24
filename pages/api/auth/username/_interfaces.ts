@@ -1,8 +1,8 @@
-import { User } from "@prisma/client";
+import { UserInfoModel } from "@interfaces";
 
 interface LoginResult {
   accessToken: string;
-  user: Partial<User>;
+  user: Partial<UserInfoModel>;
 }
 
 export type { LoginResult };
