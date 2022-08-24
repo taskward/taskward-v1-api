@@ -5,15 +5,16 @@ import { prisma } from "@database";
 import { User } from "@prisma/client";
 
 import { errorHandler } from "@utils";
-import { ValidationModel } from "@interfaces";
+import { ErrorModel, ValidationModel } from "@interfaces";
 import { ERROR_405_MESSAGE } from "@constants";
 
 import { signInValidation } from "./_services";
+import { SuccessModel } from "@interfaces";
 import { SIGN_UP_SUCCESS } from "./_constants";
 
 const signupByUsername = async (
   request: NextApiRequest,
-  response: NextApiResponse
+  response: NextApiResponse<SuccessModel | ErrorModel>
 ) => {
   try {
     if (request.method === "OPTIONS") {
@@ -21,7 +22,7 @@ const signupByUsername = async (
       return;
     }
     if (request.method !== "POST") {
-      response.status(405).json(ERROR_405_MESSAGE);
+      response.status(405).json({ errorKey: ERROR_405_MESSAGE });
       return;
     }
 
@@ -33,21 +34,21 @@ const signupByUsername = async (
     );
 
     if (!validationResult.success) {
-      response.status(400).json(validationResult.errorKey);
+      response.status(400).json({ errorKey: validationResult.errorKey });
       return;
     }
 
     const hashPassword: string = await bcrypt.hash(password, 10);
 
-    response.status(200).send(hashPassword);
-
     const user: User = await prisma.user.create({
       data: { username: username, password: hashPassword },
     });
 
-    if (user) {
-      response.status(200).json(SIGN_UP_SUCCESS);
+    if (!user) {
+      response.status(404).json({ errorKey: "Sign up failed" });
     }
+
+    response.status(200).json({ successKey: SIGN_UP_SUCCESS });
   } catch (error) {
     response.status(500).end(errorHandler(error));
   }
