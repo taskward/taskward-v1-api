@@ -10,15 +10,11 @@ import { ErrorModel } from "@interfaces";
 import { ERROR_405_MESSAGE } from "@constants";
 
 import { getGitHubUserInfoByAccessToken } from "./_services";
+import { LoginResult } from "./_interfaces";
 import {
   POST_GITHUB_TOKEN_URL,
   ERROR_401_MESSAGE_NO_TOKEN,
 } from "./_constants";
-
-interface LoginResult {
-  accessToken: string;
-  user: Partial<User>;
-}
 
 const loginWithGitHub = async (
   request: NextApiRequest,

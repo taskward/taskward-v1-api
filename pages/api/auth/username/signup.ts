@@ -16,6 +16,10 @@ const signupByUsername = async (
   response: NextApiResponse
 ) => {
   try {
+    if (request.method === "OPTIONS") {
+      response.status(200).end();
+      return;
+    }
     if (request.method !== "POST") {
       response.status(405).json(ERROR_405_MESSAGE);
       return;
@@ -34,6 +38,8 @@ const signupByUsername = async (
     }
 
     const hashPassword: string = await bcrypt.hash(password, 10);
+
+    response.status(200).send(hashPassword);
 
     const user: User = await prisma.user.create({
       data: { username: username, password: hashPassword },
