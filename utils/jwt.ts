@@ -1,12 +1,14 @@
 import type { NextApiRequest } from "next";
 import { sign, verify } from "jsonwebtoken";
 
-import { User, Role } from "@prisma/client";
-import { AuthModel } from "@interfaces";
+import { AuthModel, JWTUserModel } from "@interfaces";
 
-function createToken(user: User): string {
+function createToken(user: JWTUserModel): string | null {
+  if (!user.username || user.userId <= 0 || !user.role) {
+    return null;
+  }
   const accessToken = sign(
-    { username: user.username, userId: user.id, role: user.role },
+    { username: user.username, userId: user.userId, role: user.role },
     process.env.JWT_KEY,
     { expiresIn: "1h" }
   );

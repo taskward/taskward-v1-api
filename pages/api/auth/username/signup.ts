@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 
 import { prisma } from "@database";
-import { User } from "@prisma/client";
 
 import { errorHandler, createToken } from "@utils";
 import {
@@ -10,11 +9,12 @@ import {
   SuccessModel,
   ValidationModel,
   UserInfoModel,
+  JWTUserModel,
 } from "@interfaces";
 import { ERROR_405_MESSAGE } from "@constants";
 
 import { signInValidation } from "./_services";
-import { SIGN_UP_SUCCESS } from "./_constants";
+import { SIGNUP_FAILED, SIGNUP_SUCCESS } from "./_constants";
 import { SignupResult } from "./_interfaces";
 
 const signupByUsername = async (
@@ -31,7 +31,7 @@ const signupByUsername = async (
       return;
     }
 
-    const { username, password } = request.body;
+    const { username, password, confirmPassword } = request.body;
 
     const validationResult: ValidationModel = signInValidation(
       username,
@@ -43,36 +43,46 @@ const signupByUsername = async (
       return;
     }
 
-    const hashPassword: string = await bcrypt.hash(password, 10);
+    // Hash password
+    const hashedPassword: string = await bcrypt.hash(password, 10);
 
-    const user: User = await prisma.user.create({
-      data: { username: username, password: hashPassword },
+    // Create User
+    const user = await prisma.user.create({
+      data: { username: username, password: hashedPassword },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        biography: true,
+        location: true,
+        role: true,
+      },
     });
 
     if (!user) {
-      response.status(404).json({ errorKey: "Sign up failed" });
+      response.status(404).json({ errorKey: SIGNUP_FAILED });
+      return;
     }
 
-    const generatedToken = createToken(user);
-
-    const userInfo: UserInfoModel = {
-      id: user.id,
+    // Generate JWT Token
+    const jwtUserModel: JWTUserModel = {
       username: user.username,
-      email: user.email,
-      name: user.name,
-      avatarUrl: user.avatarUrl,
-      biography: user.biography,
-      location: user.location,
+      userId: user.id,
       role: user.role,
     };
+    const generatedToken = createToken(jwtUserModel);
+    if (!generatedToken) {
+      response.status(401).json({ errorKey: SIGNUP_FAILED });
+      return;
+    }
 
-    response
-      .status(200)
-      .json({
-        successKey: SIGN_UP_SUCCESS,
-        accessToken: generatedToken,
-        user: userInfo,
-      });
+    response.status(200).json({
+      successKey: SIGNUP_SUCCESS,
+      accessToken: generatedToken as string,
+      user: user,
+    });
   } catch (error) {
     response.status(500).end(errorHandler(error));
   }

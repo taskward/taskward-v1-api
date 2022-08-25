@@ -4,7 +4,12 @@ import bcrypt from "bcrypt";
 import { prisma } from "@database";
 
 import { createToken, errorHandler } from "@utils";
-import { ErrorModel, SuccessModel, UserInfoModel } from "@interfaces";
+import {
+  ErrorModel,
+  SuccessModel,
+  UserInfoModel,
+  JWTUserModel,
+} from "@interfaces";
 import { ERROR_405_MESSAGE } from "@constants";
 
 import { LoginResult } from "./_interfaces";
@@ -30,6 +35,17 @@ const loginByUsername = async (
       where: {
         username: username,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        biography: true,
+        location: true,
+        role: true,
+        password: true,
+      },
     });
 
     if (!user) {
@@ -37,31 +53,33 @@ const loginByUsername = async (
       return;
     }
 
+    const { password: hashedPassword, ...userInfo } = user;
+
+    // Check the hashed password
     const checkPasswordSuccess = await bcrypt.compare(
       password,
-      user.password as string
+      hashedPassword as string
     );
     if (!checkPasswordSuccess) {
       response.status(400).json({ errorKey: LOGIN_FAILED });
       return;
     }
 
-    const generatedToken = createToken(user);
-
-    const userInfo: UserInfoModel = {
-      id: user.id,
+    // Generate JWT Token
+    const jwtUserModel: JWTUserModel = {
       username: user.username,
-      email: user.email,
-      name: user.name,
-      avatarUrl: user.avatarUrl,
-      biography: user.biography,
-      location: user.location,
+      userId: user.id,
       role: user.role,
     };
+    const generatedToken = createToken(jwtUserModel);
+    if (!generatedToken) {
+      response.status(401).json({ errorKey: LOGIN_FAILED });
+      return;
+    }
 
     response.status(200).json({
       successKey: LOGIN_SUCCESS,
-      accessToken: generatedToken,
+      accessToken: generatedToken as string,
       user: userInfo,
     });
   } catch (error) {

@@ -1,5 +1,11 @@
 import type { User, Role } from "@prisma/client";
 
+interface JWTUserModel {
+  username: string;
+  userId: number;
+  role: Role;
+}
+
 interface AuthModel {
   username: string;
   userId: number;
@@ -18,4 +24,4 @@ type PickedUserInfo =
 
 type UserInfoModel = Pick<User, PickedUserInfo>;
 
-export type { AuthModel, UserInfoModel };
+export type { JWTUserModel, AuthModel, UserInfoModel };
