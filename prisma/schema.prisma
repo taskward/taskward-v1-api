@@ -70,7 +70,7 @@ model Note {
   priority    Int?      @default(0)
   index       Int       @default(0)
   toped       Boolean   @default(false)
-  archieved   Boolean   @default(false)
+  archived    Boolean   @default(false)
   tasks       Task[]
   tags        Tag[]
   themes      Theme[]

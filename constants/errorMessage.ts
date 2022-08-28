@@ -1,0 +1,3 @@
+const INPUT_INVALID = "INPUT.INVALID";
+
+export { INPUT_INVALID };

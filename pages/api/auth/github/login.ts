@@ -6,17 +6,17 @@ import { prisma } from "@database";
 import { AuthType, User } from "@prisma/client";
 
 import { errorHandler, createToken } from "@utils";
-import { ErrorModel } from "@interfaces";
-import { ERROR_405_MESSAGE } from "@constants";
+import { ErrorModel, JWTUserModel } from "@interfaces";
 
 import { getGitHubUserInfoByAccessToken } from "./_services";
 import { LoginResult } from "./_interfaces";
 import {
+  LOGIN_FAILED,
   POST_GITHUB_TOKEN_URL,
   ERROR_401_MESSAGE_NO_TOKEN,
 } from "./_constants";
 
-const loginWithGitHub = async (
+const handler = async (
   request: NextApiRequest,
   response: NextApiResponse<LoginResult | ErrorModel>
 ) => {
@@ -26,7 +26,7 @@ const loginWithGitHub = async (
       return;
     }
     if (request.method !== "POST") {
-      response.status(405).json({ errorKey: ERROR_405_MESSAGE });
+      response.status(405).end();
       return;
     }
 
@@ -62,7 +62,7 @@ const loginWithGitHub = async (
     );
 
     if (!githubUserInfo) {
-      response.status(404).json({ errorKey: "NotFound" });
+      response.status(404).end();
       return;
     }
 
@@ -86,7 +86,18 @@ const loginWithGitHub = async (
           },
         }));
 
-      const generatedToken: string = createToken(auth.User);
+      // Generate JWT Token
+      const jwtUserModel: JWTUserModel = {
+        username: auth.User.username,
+        userId: auth.User.id,
+        role: auth.User.role,
+      };
+      const generatedToken = createToken(jwtUserModel);
+      if (!generatedToken) {
+        response.status(401).json({ errorKey: LOGIN_FAILED });
+        return;
+      }
+
       const userResult: Partial<User> = {
         id: auth.userId,
         username: auth.User.username,
@@ -122,7 +133,18 @@ const loginWithGitHub = async (
         },
       });
 
-      const generatedToken: string = createToken(user);
+      // Generate JWT Token
+      const jwtUserModel: JWTUserModel = {
+        username: user.username,
+        userId: user.id,
+        role: user.role,
+      };
+      const generatedToken = createToken(jwtUserModel);
+      if (!generatedToken) {
+        response.status(401).json({ errorKey: LOGIN_FAILED });
+        return;
+      }
+
       const userResult: Partial<User> = {
         id: user.id,
         username: user.username,
@@ -144,4 +166,4 @@ const loginWithGitHub = async (
   }
 };
 
-export default loginWithGitHub;
+export default handler;

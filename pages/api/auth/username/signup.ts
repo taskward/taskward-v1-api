@@ -8,16 +8,14 @@ import {
   ErrorModel,
   SuccessModel,
   ValidationModel,
-  UserInfoModel,
   JWTUserModel,
 } from "@interfaces";
-import { ERROR_405_MESSAGE } from "@constants";
 
-import { signInValidation } from "./_services";
+import { signupValidation } from "./_services";
 import { SIGNUP_FAILED, SIGNUP_SUCCESS } from "./_constants";
 import { SignupResult } from "./_interfaces";
 
-const signupByUsername = async (
+const handler = async (
   request: NextApiRequest,
   response: NextApiResponse<(SignupResult & SuccessModel) | ErrorModel>
 ) => {
@@ -27,15 +25,16 @@ const signupByUsername = async (
       return;
     }
     if (request.method !== "POST") {
-      response.status(405).json({ errorKey: ERROR_405_MESSAGE });
+      response.status(405).end();
       return;
     }
 
     const { username, password, confirmPassword } = request.body;
 
-    const validationResult: ValidationModel = signInValidation(
+    const validationResult: ValidationModel = signupValidation(
       username,
-      password
+      password,
+      confirmPassword
     );
 
     if (!validationResult.success) {
@@ -62,7 +61,7 @@ const signupByUsername = async (
     });
 
     if (!user) {
-      response.status(404).json({ errorKey: SIGNUP_FAILED });
+      response.status(404).end();
       return;
     }
 
@@ -88,4 +87,4 @@ const signupByUsername = async (
   }
 };
 
-export default signupByUsername;
+export default handler;

@@ -1,1 +1,1 @@
-export { ERROR_405_MESSAGE } from "./api";
+export { INPUT_INVALID } from "./errorMessage";

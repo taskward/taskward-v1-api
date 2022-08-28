@@ -4,18 +4,12 @@ import bcrypt from "bcrypt";
 import { prisma } from "@database";
 
 import { createToken, errorHandler } from "@utils";
-import {
-  ErrorModel,
-  SuccessModel,
-  UserInfoModel,
-  JWTUserModel,
-} from "@interfaces";
-import { ERROR_405_MESSAGE } from "@constants";
+import { ErrorModel, SuccessModel, JWTUserModel } from "@interfaces";
 
 import { LoginResult } from "./_interfaces";
 import { LOGIN_FAILED, LOGIN_SUCCESS } from "./_constants";
 
-const loginByUsername = async (
+const handler = async (
   request: NextApiRequest,
   response: NextApiResponse<(LoginResult & SuccessModel) | ErrorModel>
 ) => {
@@ -25,7 +19,7 @@ const loginByUsername = async (
       return;
     }
     if (request.method !== "POST") {
-      response.status(405).json({ errorKey: ERROR_405_MESSAGE });
+      response.status(405).end();
       return;
     }
 
@@ -87,4 +81,4 @@ const loginByUsername = async (
   }
 };
 
-export default loginByUsername;
+export default handler;

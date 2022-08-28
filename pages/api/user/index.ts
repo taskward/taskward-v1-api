@@ -4,11 +4,11 @@ import { User } from "@prisma/client";
 import { prisma } from "@database";
 
 import { errorHandler, validateToken } from "@utils";
-import { ERROR_405_MESSAGE } from "@constants";
+import { ErrorModel } from "@interfaces";
 
 const getUserInfo = async (
   request: NextApiRequest,
-  response: NextApiResponse<Partial<User> | string>
+  response: NextApiResponse<Partial<User> | ErrorModel>
 ) => {
   try {
     if (request.method === "OPTIONS") {
@@ -16,7 +16,7 @@ const getUserInfo = async (
       return;
     }
     if (request.method !== "GET") {
-      response.status(405).json(ERROR_405_MESSAGE);
+      response.status(405).end();
       return;
     }
 
@@ -39,7 +39,6 @@ const getUserInfo = async (
         role: true,
       },
     });
-
     if (!user) {
       response.status(404).end();
       return;

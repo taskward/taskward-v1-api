@@ -1,0 +1,4 @@
+// Success keys
+const NOTE_CREATE_SUCCESS = "NOTE.CREATE.SUCCESS";
+
+export { NOTE_CREATE_SUCCESS };
