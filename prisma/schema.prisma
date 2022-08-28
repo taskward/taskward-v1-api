@@ -13,13 +13,13 @@ model User {
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
-  username  String    @unique @db.VarChar(25)
-  password  String?   @db.VarChar(255)
-  email     String?   @unique @db.VarChar(50)
-  name      String?   @db.VarChar(25)
+  username  String    @unique
+  password  String?
+  email     String?   @unique
+  name      String?
   avatarUrl String?   @map("avatar_url")
-  biography String?   @db.VarChar(255)
-  location  String?   @db.VarChar(25)
+  biography String?
+  location  String?
   role      Role      @default(USER)
   auths     Auth[]
   notes     Note[]
@@ -44,7 +44,7 @@ model Auth {
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   deletedAt   DateTime? @map("deleted_at") @db.Timestamp(3)
   authType    AuthType  @map("auth_type")
-  accessToken String    @map("access_token") @db.VarChar(128)
+  accessToken String    @map("access_token")
   openId      Int       @unique @map("open_id")
   userId      Int       @map("user_id")
   User        User      @relation(fields: [userId], references: [id])
@@ -65,8 +65,8 @@ model Note {
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   finishedAt  DateTime? @map("finished_at") @db.Timestamp(3)
   deletedAt   DateTime? @map("deleted_at") @db.Timestamp(3)
-  name        String    @db.VarChar(50)
-  description String?   @db.VarChar(255)
+  name        String
+  description String?
   priority    Int?      @default(0)
   index       Int       @default(0)
   toped       Boolean   @default(false)
@@ -87,7 +87,7 @@ model Task {
   finishedAt DateTime? @map("finished_at") @db.Timestamp(3)
   deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
   finished   Boolean   @default(false)
-  content    String?   @db.VarChar(255)
+  content    String?
   linkUrl    String?   @map("link_url")
   index      Int       @default(0)
   noteId     Int       @map("note_id")
