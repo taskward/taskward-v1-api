@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { prisma } from "@database";
 
-import { errorHandler, validateToken } from "@utils";
+import { errorHandler, isNumber, validateToken } from "@utils";
 import { ErrorModel, SuccessModel } from "@interfaces";
 
 const handler = async (
@@ -14,31 +14,47 @@ const handler = async (
       response.status(200).end();
       return;
     }
-    if (request.method !== "GET" && request.method !== "PUT") {
+
+    if (request.method !== "PUT" && request.method !== "DELETE") {
       response.status(405).end();
       return;
     }
+
+    // Validate token
+    // const authResult = validateToken(request);
+    // if (!authResult) {
+    //   response.status(401).end();
+    //   return;
+    // }
+
     if (request.method === "PUT") {
-      const authResult = validateToken(request);
-      if (!authResult) {
-        response.status(401).end();
+      const { id: noteId } = request.query;
+      const { name, description, userId } = request.body;
+      console.log(typeof noteId);
+      if (!noteId || !isNumber(noteId) || noteId <= 0) {
+        response.status(400).end();
         return;
       }
 
-      const { name, description } = request.body;
-
-      const note = await prisma.note.create({
+      const updated = await prisma.user.update({
+        where: { id: userId },
         data: {
-          name: name,
-          description: description,
-          userId: authResult.userId,
+          notes: {
+            update: {
+              where: { id: noteId },
+              data: {
+                name: name,
+                description: description,
+              },
+            },
+          },
         },
       });
+      console.log(updated);
 
-      if (!note) {
-        response.status(404).end();
-        return;
-      }
+      response.status(200).send({ successKey: "Success" });
+      return;
+    } else if (request.method === "DELETE") {
     }
   } catch (error) {
     response.status(500).end(errorHandler(error));

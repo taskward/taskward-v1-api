@@ -3,7 +3,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@database";
 import { errorHandler, validateToken } from "@utils";
 import { ErrorModel, SuccessModel } from "@interfaces";
-import { INPUT_INVALID } from "@constants";
 
 import { NoteListResult } from "./_interfaces";
 import { NOTE_CREATE_SUCCESS } from "./_constants";
@@ -31,7 +30,7 @@ const handler = async (
       return;
     }
 
-    if (request.method == "GET") {
+    if (request.method === "GET") {
       const notes = await prisma.note.findMany({
         where: { userId: authResult.userId, archived: false },
         select: {
@@ -51,11 +50,6 @@ const handler = async (
       response.status(200).json({ notes: notes, count: notes.length });
     } else if (request.method === "POST") {
       const { name, description } = request.body;
-
-      // if (name.length > 50 || description.length > 255) {
-      //   response.status(400).json({ errorKey: INPUT_INVALID });
-      //   return;
-      // }
 
       const note = await prisma.note.create({
         data: {
