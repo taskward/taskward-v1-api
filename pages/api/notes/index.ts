@@ -52,10 +52,10 @@ const handler = async (
     } else if (request.method === "POST") {
       const { name, description } = request.body;
 
-      if (name.length > 50 || description.length > 255) {
-        response.status(400).json({ errorKey: INPUT_INVALID });
-        return;
-      }
+      // if (name.length > 50 || description.length > 255) {
+      //   response.status(400).json({ errorKey: INPUT_INVALID });
+      //   return;
+      // }
 
       const note = await prisma.note.create({
         data: {
