@@ -37,6 +37,7 @@ const handler = async (
           id: true,
           name: true,
           description: true,
+          createdAt: true,
           updatedAt: true,
           priority: true,
           index: true,

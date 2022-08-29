@@ -4,6 +4,7 @@ type PickedNoteListField =
   | "id"
   | "name"
   | "description"
+  | "createdAt"
   | "updatedAt"
   | "priority"
   | "index"
