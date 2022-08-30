@@ -100,7 +100,7 @@ prisma.$use(
         if (params.args.data != undefined) {
           params.args.data["deletedAt"] = new Date().toISOString();
         } else {
-          params.args["data"] = { deleteAt: new Date().toISOString() };
+          params.args["data"] = { deletedAt: new Date().toISOString() };
         }
       }
       if (params.action == "deleteMany") {
