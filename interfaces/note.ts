@@ -12,4 +12,14 @@ type PickedNoteListField =
 
 type NoteListModel = Pick<Note, PickedNoteListField>;
 
-export type { NoteListModel };
+type PickedTrashNoteListField =
+  | "id"
+  | "name"
+  | "description"
+  | "createdAt"
+  | "updatedAt"
+  | "deletedAt";
+
+type TrashNoteListModel = Pick<Note, PickedTrashNoteListField>;
+
+export type { NoteListModel, TrashNoteListModel };

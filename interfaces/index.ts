@@ -1,6 +1,6 @@
 export type { JWTUserModel, AuthModel, UserInfoModel } from "./auth";
 
-export type { NoteListModel } from "./note";
+export type { NoteListModel, TrashNoteListModel } from "./note";
 
 export type { ErrorModel, SuccessModel } from "./response";
 
