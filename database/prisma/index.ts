@@ -87,22 +87,22 @@ prisma.$use(
 );
 
 // Effect:
-// delete => update
-// deleteMany => updateMany
+// delete => for delete
+// deleteMany => updateMany / for soft delete
 prisma.$use(
   async (
     params: Prisma.MiddlewareParams,
     next: (params: Prisma.MiddlewareParams) => Promise<any>
   ) => {
     if (params.model && softDeleteModels.includes(params.model)) {
-      if (params.action == "delete") {
-        params.action = "update";
-        if (params.args.data != undefined) {
-          params.args.data["deletedAt"] = new Date().toISOString();
-        } else {
-          params.args["data"] = { deletedAt: new Date().toISOString() };
-        }
-      }
+      // if (params.action == "delete") {
+      //   params.action = "update";
+      //   if (params.args.data != undefined) {
+      //     params.args.data["deletedAt"] = new Date().toISOString();
+      //   } else {
+      //     params.args["data"] = { deletedAt: new Date().toISOString() };
+      //   }
+      // }
       if (params.action == "deleteMany") {
         params.action = "updateMany";
         if (params.args.data != undefined) {
