@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { prisma } from "@database";
-
 import { errorHandler, validateToken } from "@utils";
 import { ErrorModel, SuccessModel } from "@interfaces";
 
@@ -15,7 +14,7 @@ const handler = async (
       return;
     }
 
-    if (request.method !== "PUT" && request.method !== "DELETE") {
+    if (request.method !== "PUT") {
       response.status(405).end();
       return;
     }
@@ -36,9 +35,9 @@ const handler = async (
 
     if (request.method === "PUT") {
       const { count } = await prisma.note.updateMany({
-        where: { id: Number(noteId), deletedAt: { not: { equals: null } } },
+        where: { id: Number(noteId) },
         data: {
-          deletedAt: null,
+          archived: true,
         },
       });
 
@@ -47,30 +46,7 @@ const handler = async (
         return;
       }
 
-      response.status(200).send({ successKey: "Success" });
-      return;
-    } else if (request.method === "DELETE") {
-      const note = prisma.note.findFirst({
-        where: { id: Number(noteId), deletedAt: { not: { equals: null } } },
-      });
-
-      if (!note) {
-        response.status(404).end();
-        return;
-      }
-
-      try {
-        await prisma.note.delete({
-          where: {
-            id: Number(noteId),
-          },
-        });
-      } catch (error) {
-        response.status(404).end();
-        return;
-      }
-
-      response.status(200).send({ successKey: "Success" });
+      response.status(200).end();
       return;
     }
   } catch (error) {

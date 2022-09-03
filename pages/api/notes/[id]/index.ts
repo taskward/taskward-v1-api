@@ -49,7 +49,7 @@ const handler = async (
         return;
       }
 
-      response.status(200).send({ successKey: "Success" });
+      response.status(200).end();
       return;
     } else if (request.method === "DELETE") {
       const { count } = await prisma.note.deleteMany({
@@ -63,7 +63,7 @@ const handler = async (
         return;
       }
 
-      response.status(200).send({ successKey: "Success" });
+      response.status(200).end();
       return;
     }
   } catch (error) {
