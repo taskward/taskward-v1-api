@@ -10,7 +10,7 @@ function createToken(user: JWTUserModel): string | null {
   const accessToken = sign(
     { username: user.username, userId: user.userId, role: user.role },
     process.env.JWT_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "1d" }
     // { expiresIn: "1s" }
   );
   return accessToken;
