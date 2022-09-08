@@ -86,7 +86,6 @@ model Task {
   updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   finishedAt DateTime? @map("finished_at") @db.Timestamp(3)
   deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
-  finished   Boolean   @default(false)
   content    String?
   linkUrl    String?   @map("link_url")
   index      Int       @default(0)
