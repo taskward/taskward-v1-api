@@ -42,6 +42,17 @@ const handler = async (
           priority: true,
           index: true,
           toped: true,
+          tasks: {
+            select: {
+              id: true,
+              content: true,
+              linkUrl: true,
+              finishedAt: true,
+              createdAt: true,
+              updatedAt: true,
+              index: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",
@@ -53,7 +64,7 @@ const handler = async (
       const { name, description, tasks: tasksData } = request.body;
 
       // Check whether the note has tasks
-      if (tasksData.length > 0) {
+      if (tasksData && tasksData.length > 0) {
         const tasks = tasksData.map((task: any) => {
           return {
             content: task.content,
