@@ -58,7 +58,7 @@ const handler = async (
           return {
             content: task.content,
             linkUrl: task.linkUrl,
-            finishedAt: task.checked ? new Date().toISOString() : null,
+            finishedAt: task.finished ? new Date().toISOString() : null,
           };
         });
         const note = await prisma.note.create({
