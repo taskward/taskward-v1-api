@@ -52,6 +52,7 @@ const handler = async (
               updatedAt: true,
               index: true,
             },
+            orderBy: { createdAt: "asc" },
           },
         },
         orderBy: {

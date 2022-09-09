@@ -42,6 +42,18 @@ const handler = async (
           createdAt: true,
           updatedAt: true,
           deletedAt: true,
+          tasks: {
+            select: {
+              id: true,
+              content: true,
+              linkUrl: true,
+              finishedAt: true,
+              createdAt: true,
+              updatedAt: true,
+              index: true,
+            },
+            orderBy: { createdAt: "asc" },
+          },
         },
         orderBy: {
           deletedAt: "desc",

@@ -1,4 +1,4 @@
-import type { Note } from "@prisma/client";
+import type { Note, Task } from "@prisma/client";
 
 type PickedNoteListField =
   | "id"
@@ -10,7 +10,18 @@ type PickedNoteListField =
   | "index"
   | "toped";
 
-type NoteListModel = Pick<Note, PickedNoteListField>;
+type PickedTaskListField =
+  | "id"
+  | "content"
+  | "linkUrl"
+  | "createdAt"
+  | "updatedAt"
+  | "finishedAt"
+  | "index";
+
+type NoteListModel = Pick<Note, PickedNoteListField> & {
+  tasks: Pick<Task, PickedTaskListField>[];
+};
 
 type PickedTrashNoteListField =
   | "id"
@@ -20,6 +31,8 @@ type PickedTrashNoteListField =
   | "updatedAt"
   | "deletedAt";
 
-type TrashNoteListModel = Pick<Note, PickedTrashNoteListField>;
+type TrashNoteListModel = Pick<Note, PickedTrashNoteListField> & {
+  tasks: Pick<Task, PickedTaskListField>[];
+};
 
 export type { NoteListModel, TrashNoteListModel };
