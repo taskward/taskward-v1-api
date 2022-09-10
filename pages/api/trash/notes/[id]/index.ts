@@ -60,6 +60,10 @@ const handler = async (
       }
 
       try {
+        await prisma.note.update({
+          where: { id: Number(noteId) },
+          data: { tasks: { deleteMany: { deletedAt: null } } },
+        });
         await prisma.note.delete({
           where: {
             id: Number(noteId),

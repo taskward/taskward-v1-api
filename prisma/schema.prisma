@@ -85,7 +85,6 @@ model Task {
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
   finishedAt DateTime? @map("finished_at") @db.Timestamp(3)
-  deletedAt  DateTime? @map("deleted_at") @db.Timestamp(3)
   content    String?
   linkUrl    String?   @map("link_url")
   index      Int       @default(0)
@@ -99,7 +98,6 @@ model Tag {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
-  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   index     Int       @default(0)
   userId    Int       @map("user_id")
   User      User      @relation(fields: [userId], references: [id])
@@ -113,7 +111,6 @@ model Theme {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamp(3)
-  deletedAt DateTime? @map("deleted_at") @db.Timestamp(3)
   index     Int       @default(0)
   userId    Int       @map("user_id")
   User      User      @relation(fields: [userId], references: [id])
