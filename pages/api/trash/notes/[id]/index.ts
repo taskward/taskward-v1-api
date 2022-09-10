@@ -60,15 +60,15 @@ const handler = async (
       }
 
       try {
-        await prisma.note.update({
-          where: { id: Number(noteId) },
-          data: { tasks: { deleteMany: { deletedAt: null } } },
+        const deleteTasks = prisma.task.deleteMany({
+          where: { noteId: Number(noteId) },
         });
-        await prisma.note.delete({
+        const deleteNote = prisma.note.delete({
           where: {
             id: Number(noteId),
           },
         });
+        await prisma.$transaction([deleteTasks, deleteNote]);
       } catch (error) {
         response.status(404).end();
         return;
