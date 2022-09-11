@@ -33,7 +33,6 @@ enum Role {
   ADMIN      @map("admin")
   USER       @map("user")
   MEMBERSHIP @map("membership")
-  BETA       @map("beta")
 
   @@map("role")
 }
