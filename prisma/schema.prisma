@@ -5,7 +5,6 @@ generator client {
 datasource db {
   provider          = "postgresql"
   url               = env("BRUCE_WORLD_DATABASE_URL")
-  shadowDatabaseUrl = env("BRUCE_WORLD_SHADOW_DATABASE_URL")
 }
 
 model User {
