@@ -37,61 +37,81 @@ const handler = async (
 
     if (request.method === "PUT") {
       // Check whether the note has tasks
-      try {
+      if (tasksData && tasksData.length > 0) {
+        const tasks = tasksData.map((task: any) => {
+          return {
+            id: task.id,
+            content: task.content,
+            linkUrl: task.linkUrl,
+            finishedAt: task.finished ? new Date().toISOString() : null,
+            deleted: task.deleted,
+            created: task.created,
+          };
+        });
         await prisma.note.update({
           where: { id: Number(noteId) },
           data: {
-            tasks: { deleteMany: {} },
+            name: name,
+            description: description,
           },
         });
-        if (tasksData && tasksData.length > 0) {
-          const tasks = tasksData.map((task: any) => {
-            return {
-              id: task.id,
-              content: task.content,
-              linkUrl: task.linkUrl,
-              finishedAt: task.finished ? new Date().toISOString() : null,
-            };
-          });
-          await prisma.note.update({
-            where: { id: Number(noteId) },
-            data: {
-              name: name,
-              description: description,
-            },
-          });
-          tasks.forEach(async (task: any) => {
-            await prisma.task.create({
-              data: {
+
+        let deletedTaskIds: number[] = [];
+        let createdTasks: any[] = [];
+
+        await Promise.all([
+          tasks.map(async (task: any): Promise<void> => {
+            if (task.deleted) {
+              deletedTaskIds.push(task.id);
+            } else if (task.created) {
+              createdTasks.push({
                 content: task.content,
                 linkUrl: task.linkUrl,
                 finishedAt: task.finishedAt,
                 noteId: Number(noteId),
-              },
-            });
-          });
-        } else {
-          await prisma.note.update({
-            where: { id: Number(noteId) },
-            data: {
-              name: name,
-              description: description,
-            },
-          });
-        }
-      } catch (error) {
-        errorHandler(error);
-        response.status(404).end();
-        return;
+              });
+            } else {
+              await prisma.task.updateMany({
+                where: {
+                  id: task.id,
+                },
+                data: {
+                  content: task.content,
+                  linkUrl: task.linkUrl,
+                  finishedAt: task.finishedAt,
+                  noteId: Number(noteId),
+                },
+              });
+            }
+          }),
+        ]);
+
+        await prisma.task.deleteMany({
+          where: { id: { in: deletedTaskIds } },
+        });
+        await prisma.task.createMany({
+          data: createdTasks,
+        });
+      } else {
+        await prisma.note.update({
+          where: { id: Number(noteId) },
+          data: {
+            name: name,
+            description: description,
+            tasks: { deleteMany: {} },
+          },
+        });
       }
 
       response.status(200).end();
       return;
     } else if (request.method === "DELETE") {
-      const { count } = await prisma.note.deleteMany({
+      const { count } = await prisma.note.updateMany({
         where: {
           id: Number(noteId),
-          deletedAt: null,
+        },
+        data: {
+          deletedAt: new Date().toISOString(),
         },
       });
 
