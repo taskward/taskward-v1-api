@@ -37,37 +37,52 @@ const handler = async (
 
     if (request.method === "PUT") {
       // Check whether the note has tasks
-      if (tasksData && tasksData.length > 0) {
-        const tasks = tasksData.map((task: any) => {
-          return {
-            content: task.content,
-            linkUrl: task.linkUrl,
-            finishedAt: task.finished ? new Date().toISOString() : null,
-          };
-        });
-        const { count } = await prisma.note.updateMany({
+      try {
+        await prisma.note.update({
           where: { id: Number(noteId) },
           data: {
-            name: name,
-            description: description,
+            tasks: { deleteMany: {} },
           },
         });
-        if (count === 0) {
-          response.status(404).end();
-          return;
+        if (tasksData && tasksData.length > 0) {
+          const tasks = tasksData.map((task: any) => {
+            return {
+              id: task.id,
+              content: task.content,
+              linkUrl: task.linkUrl,
+              finishedAt: task.finished ? new Date().toISOString() : null,
+            };
+          });
+          await prisma.note.update({
+            where: { id: Number(noteId) },
+            data: {
+              name: name,
+              description: description,
+            },
+          });
+          tasks.forEach(async (task: any) => {
+            await prisma.task.create({
+              data: {
+                content: task.content,
+                linkUrl: task.linkUrl,
+                finishedAt: task.finishedAt,
+                noteId: Number(noteId),
+              },
+            });
+          });
+        } else {
+          await prisma.note.update({
+            where: { id: Number(noteId) },
+            data: {
+              name: name,
+              description: description,
+            },
+          });
         }
-      } else {
-        const { count } = await prisma.note.updateMany({
-          where: { id: Number(noteId) },
-          data: {
-            name: name,
-            description: description,
-          },
-        });
-        if (count === 0) {
-          response.status(404).end();
-          return;
-        }
+      } catch (error) {
+        errorHandler(error);
+        response.status(404).end();
+        return;
       }
 
       response.status(200).end();
