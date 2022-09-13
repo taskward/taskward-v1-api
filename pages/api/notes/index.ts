@@ -32,7 +32,7 @@ const handler = async (
 
     if (request.method === "GET") {
       const notes = await prisma.note.findMany({
-        where: { userId: authResult.userId, archived: false },
+        where: { userId: authResult.userId, archived: false, deletedAt: null },
         select: {
           id: true,
           name: true,
@@ -73,7 +73,6 @@ const handler = async (
             finishedAt: task.finished ? new Date().toISOString() : null,
           };
         });
-        console.log(tasks);
         const note = await prisma.note.create({
           data: {
             name: name,

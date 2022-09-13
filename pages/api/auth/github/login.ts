@@ -72,6 +72,7 @@ const handler = async (
       where: {
         authType: AuthType.GITHUB,
         openId: githubUserInfo.id,
+        deletedAt: null,
       },
     });
 

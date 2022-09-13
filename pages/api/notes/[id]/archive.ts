@@ -35,7 +35,7 @@ const handler = async (
 
     if (request.method === "PUT") {
       const { count } = await prisma.note.updateMany({
-        where: { id: Number(noteId) },
+        where: { id: Number(noteId), deletedAt: null },
         data: {
           archived: true,
         },

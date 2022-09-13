@@ -91,6 +91,7 @@ const handler = async (
       const { count } = await prisma.note.deleteMany({
         where: {
           id: Number(noteId),
+          deletedAt: null,
         },
       });
 

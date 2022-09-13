@@ -45,6 +45,15 @@ const handler = async (
     // Hash password
     const hashedPassword: string = await bcrypt.hash(password, 10);
 
+    const usernameRepeated = await prisma.user.findFirst({
+      where: { username: username, deletedAt: null },
+    });
+
+    if (usernameRepeated) {
+      response.status(409).end();
+      return;
+    }
+
     // Create User
     const user = await prisma.user.create({
       data: { username: username, password: hashedPassword },

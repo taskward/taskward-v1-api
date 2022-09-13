@@ -27,7 +27,7 @@ const getUserInfo = async (
     }
 
     const user: Partial<User> | null = await prisma.user.findFirst({
-      where: { id: authResult.userId },
+      where: { id: authResult.userId, deletedAt: null },
       select: {
         id: true,
         username: true,

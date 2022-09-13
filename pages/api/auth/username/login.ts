@@ -28,6 +28,7 @@ const handler = async (
     const user = await prisma.user.findFirst({
       where: {
         username: username,
+        deletedAt: null,
       },
       select: {
         id: true,
