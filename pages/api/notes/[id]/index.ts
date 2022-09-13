@@ -28,7 +28,7 @@ const handler = async (
     }
 
     const { id: noteId } = request.query;
-    const { name, description } = request.body;
+    const { name, description, tasks: tasksData } = request.body;
 
     if (!noteId || isNaN(Number(noteId)) || Number(noteId) <= 0) {
       response.status(400).end();
@@ -36,17 +36,38 @@ const handler = async (
     }
 
     if (request.method === "PUT") {
-      const { count } = await prisma.note.updateMany({
-        where: { id: Number(noteId) },
-        data: {
-          name: name,
-          description: description,
-        },
-      });
-
-      if (count === 0) {
-        response.status(404).end();
-        return;
+      // Check whether the note has tasks
+      if (tasksData && tasksData.length > 0) {
+        const tasks = tasksData.map((task: any) => {
+          return {
+            content: task.content,
+            linkUrl: task.linkUrl,
+            finishedAt: task.finished ? new Date().toISOString() : null,
+          };
+        });
+        const { count } = await prisma.note.updateMany({
+          where: { id: Number(noteId) },
+          data: {
+            name: name,
+            description: description,
+          },
+        });
+        if (count === 0) {
+          response.status(404).end();
+          return;
+        }
+      } else {
+        const { count } = await prisma.note.updateMany({
+          where: { id: Number(noteId) },
+          data: {
+            name: name,
+            description: description,
+          },
+        });
+        if (count === 0) {
+          response.status(404).end();
+          return;
+        }
       }
 
       response.status(200).end();

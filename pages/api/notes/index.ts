@@ -73,6 +73,7 @@ const handler = async (
             finishedAt: task.finished ? new Date().toISOString() : null,
           };
         });
+        console.log(tasks);
         const note = await prisma.note.create({
           data: {
             name: name,
