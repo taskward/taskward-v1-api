@@ -31,7 +31,7 @@ const handler = async (
 
     if (request.method === "GET") {
       const notes = await prisma.note.findMany({
-        where: { userId: authResult.userId, archived: true },
+        where: { userId: authResult.userId, archived: true, deletedAt: null },
         select: {
           id: true,
           name: true,
