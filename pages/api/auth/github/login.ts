@@ -151,7 +151,7 @@ const handler = async (
                   linkUrl: "https://taskward.bruceworld.top",
                 },
                 {
-                  content: "这是一个 Task，点击左侧 👈 勾选即表示完成 ✅",
+                  content: "这是一个 Task，点击左侧 👈 勾选即表示已完成 ✅",
                 },
                 {
                   content: "已经完成的 Task",
