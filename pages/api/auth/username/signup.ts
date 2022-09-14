@@ -74,6 +74,35 @@ const handler = async (
       return;
     }
 
+    await prisma.note.create({
+      data: {
+        userId: user.id,
+        name: "👏 欢迎来到 Taskward",
+        description: "这里是一个简易的示例，您可以将记录放在这里",
+        tasks: {
+          createMany: {
+            data: [
+              {
+                content: "作者 GitHub 主页",
+                linkUrl: "https://github.com/recallwei",
+              },
+              {
+                content: "Taskward 主页",
+                linkUrl: "https://taskward.bruceworld.top",
+              },
+              {
+                content: "这是一个 Task，点击左侧 👈 勾选即表示完成 ✅",
+              },
+              {
+                content: "已经完成的 Task",
+                finishedAt: new Date().toISOString(),
+              },
+            ],
+          },
+        },
+      },
+    });
+
     // Generate JWT Token
     const jwtUserModel: JWTUserModel = {
       username: user.username,
