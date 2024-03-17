@@ -142,7 +142,7 @@ const handler = async (
                 },
                 {
                   content: 'Taskward 主页',
-                  linkUrl: 'https://taskward.bruceworld.top'
+                  linkUrl: 'https://taskward-v1.bit-ocean.studio'
                 },
                 {
                   content: '这是一个 Task，点击左侧 👈 勾选即表示已完成 ✅'
