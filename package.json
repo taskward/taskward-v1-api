@@ -5,7 +5,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:docker": "docker-compose up -d && next dev"
+    "dev:docker": "docker-compose up -d && next dev -p 3005"
   },
   "dependencies": {
     "@prisma/client": "^4.3.1",
