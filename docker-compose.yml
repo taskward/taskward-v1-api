@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  dolphin-admin-db:
+  taskward-db:
     image: postgres:15
     container_name: taskward-db
     restart: always
     ports:
       - 5432:5432
     env_file:
-      - .env.development.local
+      - .env.local

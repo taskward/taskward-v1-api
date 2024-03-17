@@ -1,8 +1,8 @@
-import { NoteListModel } from "@interfaces";
+import { NoteListModel } from '@/interfaces'
 
 interface NoteListResult {
-  notes: NoteListModel[];
-  count: number;
+  notes: NoteListModel[]
+  count: number
 }
 
-export type { NoteListResult };
+export type { NoteListResult }

@@ -1,6 +1,6 @@
 interface ValidationModel {
-  success: boolean;
-  errorKey?: string;
+  success: boolean
+  errorKey?: string
 }
 
-export type { ValidationModel };
+export type { ValidationModel }

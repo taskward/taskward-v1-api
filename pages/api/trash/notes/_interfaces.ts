@@ -1,8 +1,8 @@
-import { TrashNoteListModel } from "@interfaces";
+import { TrashNoteListModel } from '@/interfaces'
 
 interface TrashNoteListResult {
-  notes: TrashNoteListModel[];
-  count: number;
+  notes: TrashNoteListModel[]
+  count: number
 }
 
-export type { TrashNoteListResult };
+export type { TrashNoteListResult }

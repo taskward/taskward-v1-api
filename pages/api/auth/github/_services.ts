@@ -1,19 +1,17 @@
-import axios from "axios";
+import axios from 'axios'
 
-import type { GitHubUserInfo } from "@interfaces";
-import { GET_GITHUB_USER_URL } from "./_constants";
+import type { GitHubUserInfo } from '@/interfaces'
+import { GET_GITHUB_USER_URL } from './_constants'
 
-async function getGitHubUserInfoByAccessToken(
-  accessToken: string
-): Promise<GitHubUserInfo | null> {
+async function getGitHubUserInfoByAccessToken(accessToken: string): Promise<GitHubUserInfo | null> {
   const user = await axios({
-    method: "GET",
+    method: 'GET',
     url: GET_GITHUB_USER_URL,
     headers: {
-      accept: "application/json;charset=utf-8",
-      Authorization: `token ${accessToken}`,
-    },
-  });
+      accept: 'application/json;charset=utf-8',
+      Authorization: `token ${accessToken}`
+    }
+  })
 
   return user.data
     ? {
@@ -23,9 +21,9 @@ async function getGitHubUserInfoByAccessToken(
         email: user.data.email,
         avatarUrl: user.data.avatar_url,
         bio: user.data.bio,
-        location: user.data.location,
+        location: user.data.location
       }
-    : null;
+    : null
 }
 
-export { getGitHubUserInfoByAccessToken };
+export { getGitHubUserInfoByAccessToken }

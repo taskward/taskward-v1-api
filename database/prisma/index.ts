@@ -1,17 +1,17 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from '@prisma/client'
 
 interface CustomNodeJSGlobal extends Global {
-  prisma: PrismaClient;
+  prisma: PrismaClient
 }
 
-declare const global: CustomNodeJSGlobal;
+declare const global: CustomNodeJSGlobal
 
 const prisma: PrismaClient =
   global.prisma ||
   new PrismaClient({
-    log: ["query", "info", "warn", "error"],
-    errorFormat: "pretty",
-  });
+    log: ['query', 'info', 'warn', 'error'],
+    errorFormat: 'pretty'
+  })
 
 // Logging middleware
 prisma.$use(
@@ -19,18 +19,18 @@ prisma.$use(
     params: Prisma.MiddlewareParams,
     next: (params: Prisma.MiddlewareParams) => Promise<any>
   ) => {
-    const before = Date.now();
-    const result = await next(params);
-    const after = Date.now();
+    const before = Date.now()
+    const result = await next(params)
+    const after = Date.now()
     // console.log(
     //   `Query ${params.model}.${params.action} took ${after - before}ms`
     // );
-    return result;
+    return result
   }
-);
+)
 
-if (process.env.NODE_ENV !== "production") {
-  global.prisma = prisma;
+if (process.env.NODE_ENV !== 'production') {
+  global.prisma = prisma
 }
 
-export { prisma };
+export { prisma }

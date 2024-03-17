@@ -1,1 +1,1 @@
-export { INPUT_INVALID } from "./errorMessage";
+export { INPUT_INVALID } from './errorMessage'

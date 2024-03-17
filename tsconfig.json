@@ -16,20 +16,9 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@utils": ["utils"],
-      "@constants": ["constants"],
-      "@components": ["components"],
-      "@hooks": ["hooks"],
-      "@interfaces": ["interfaces"],
-      "@database": ["database"]
+      "@/*": ["./*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "process.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/middleware.ts"
-  ],
+  "include": ["next-env.d.ts", "process.d.ts", "**/*.ts", "**/*.tsx", ".next/middleware.ts"],
   "exclude": ["node_modules", "prisma"]
 }

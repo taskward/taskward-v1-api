@@ -1,9 +1,9 @@
 interface ErrorModel {
-  errorKey?: string;
+  errorKey?: string
 }
 
 interface SuccessModel {
-  successKey?: string;
+  successKey?: string
 }
 
-export type { ErrorModel, SuccessModel };
+export type { ErrorModel, SuccessModel }
